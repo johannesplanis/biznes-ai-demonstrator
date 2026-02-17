@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Golden Milky wAI</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <button id="backButton" class="icon-button hidden" aria-label="Wróć">←</button>
+        <h1>Golden Milky wAI</h1>
+      </header>
+
+      <section id="screen-herd" class="screen active">
+        <p class="subtitle">Twoja trzoda</p>
+        <div id="cowList" class="card-list"></div>
+      </section>
+
+      <section id="screen-upload" class="screen">
+        <p class="subtitle" id="selectedCowLabel"></p>
+        <label for="usgInput" class="upload-zone">
+          <input type="file" id="usgInput" accept="image/*" />
+          <span>Dodaj zdjęcie USG</span>
+        </label>
+        <button id="toPreviewButton" class="button" disabled>Podgląd</button>
+      </section>
+
+      <section id="screen-preview" class="screen">
+        <p class="subtitle" id="previewCowLabel"></p>
+        <img id="previewImage" alt="Podgląd zdjęcia USG" class="preview" />
+        <button id="analyzeButton" class="button">Analizuj</button>
+      </section>
+
+      <section id="screen-result" class="screen">
+        <p class="subtitle" id="resultCowLabel"></p>
+        <article class="result-card" id="resultCard"></article>
+        <button id="restartButton" class="button secondary">Nowe badanie</button>
+      </section>
+    </main>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
