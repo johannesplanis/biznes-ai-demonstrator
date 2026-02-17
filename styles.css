@@ -3,7 +3,6 @@
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --bg: #f3f5fb;
   --surface: #ffffff;
-  --text: #10213e;
   --muted: #667085;
   --accent: #315efb;
   --accent-2: #dbe5ff;
@@ -11,9 +10,7 @@
   --success: #1f9d5a;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -44,10 +41,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.topbar h1 {
-  margin: 0;
-  font-size: 1.1rem;
-}
+.topbar h1 { margin: 0; font-size: 1.1rem; }
 
 .icon-button {
   border: none;
@@ -57,9 +51,7 @@ body {
   cursor: pointer;
 }
 
-.hidden {
-  visibility: hidden;
-}
+.hidden { visibility: hidden; }
 
 .screen {
   display: none;
@@ -69,16 +61,19 @@ body {
   flex-direction: column;
 }
 
-.screen.active {
-  display: flex;
+.screen.active { display: flex; }
+.screen-center { justify-content: center; align-items: center; }
+
+.splash-brand {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #1b2c5b;
 }
 
-.subtitle {
-  margin: 0;
-  font-weight: 600;
-  color: var(--muted);
-}
+.subtitle { margin: 0; font-weight: 600; color: var(--muted); }
 
+.menu-list,
 .card-list {
   display: grid;
   gap: 0.7rem;
@@ -92,15 +87,9 @@ body {
   gap: 0.5rem;
 }
 
-.cow-card h2 {
-  margin: 0;
-  font-size: 1rem;
-}
+.cow-card h2 { margin: 0; font-size: 1rem; }
 
-.meta {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
+.meta { color: var(--muted); font-size: 0.9rem; }
 
 .button {
   border: none;
@@ -112,15 +101,8 @@ body {
   cursor: pointer;
 }
 
-.button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.secondary {
-  background: var(--accent-2);
-  color: #223567;
-}
+.button:disabled { opacity: 0.55; cursor: not-allowed; }
+.secondary { background: var(--accent-2); color: #223567; }
 
 .upload-zone {
   border: 2px dashed #b7c4ea;
@@ -132,9 +114,7 @@ body {
   background: #f8faff;
 }
 
-.upload-zone input {
-  display: none;
-}
+.upload-zone input { display: none; }
 
 .preview {
   width: 100%;
@@ -153,21 +133,11 @@ body {
   gap: 0.8rem;
 }
 
-.result-card p {
-  margin: 0;
-}
-
-.result-card .score {
-  font-size: 1.8rem;
-  color: var(--success);
-  font-weight: 700;
-}
+.result-card p { margin: 0; }
+.result-card .score { font-size: 1.8rem; color: var(--success); font-weight: 700; }
 
 @media (max-width: 480px) {
-  body {
-    padding: 0;
-  }
-
+  body { padding: 0; }
   .app-shell {
     min-height: 100vh;
     border-radius: 0;

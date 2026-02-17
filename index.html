@@ -13,7 +13,21 @@
         <h1>Golden Milky wAI</h1>
       </header>
 
-      <section id="screen-herd" class="screen active">
+      <section id="screen-splash" class="screen active screen-center">
+        <div class="splash-brand">Golden Milky wAI</div>
+      </section>
+
+      <section id="screen-menu" class="screen">
+        <p class="subtitle">Menu główne</p>
+        <div class="menu-list">
+          <button id="menuHerdButton" class="button" type="button">Zarządzaj trzodą</button>
+          <button class="button secondary" type="button" disabled>Nadchodzące badania</button>
+          <button class="button secondary" type="button" disabled>Kalkulator laktacji</button>
+          <button class="button secondary" type="button" disabled>Nowe badanie</button>
+        </div>
+      </section>
+
+      <section id="screen-herd" class="screen">
         <p class="subtitle">Twoja trzoda</p>
         <div id="cowList" class="card-list"></div>
       </section>
@@ -24,7 +38,6 @@
           <input type="file" id="usgInput" accept="image/*" />
           <span>Dodaj zdjęcie USG</span>
         </label>
-        <button id="toPreviewButton" class="button" disabled>Podgląd</button>
       </section>
 
       <section id="screen-preview" class="screen">
@@ -36,7 +49,7 @@
       <section id="screen-result" class="screen">
         <p class="subtitle" id="resultCowLabel"></p>
         <article class="result-card" id="resultCard"></article>
-        <button id="restartButton" class="button secondary">Nowe badanie</button>
+        <button id="finishButton" class="button">Zakończ badanie</button>
       </section>
     </main>
 

@@ -5,27 +5,9 @@ const cows = [
 ];
 
 const milkRanges = {
-  'Wczesna laktacja': {
-    5: [40, 45],
-    4: [35, 39],
-    3: [30, 35],
-    2: [25, 30],
-    1: [22, 24],
-  },
-  'Środkowa laktacja': {
-    5: [34, 38],
-    4: [30, 34],
-    3: [26, 32],
-    2: [22, 26],
-    1: [19, 21],
-  },
-  'Późna laktacja': {
-    5: [28, 30],
-    4: [24, 28],
-    3: [20, 24],
-    2: [16, 20],
-    1: [13, 15],
-  },
+  'Wczesna laktacja': { 5: [40, 45], 4: [35, 39], 3: [30, 35], 2: [25, 30], 1: [22, 24] },
+  'Środkowa laktacja': { 5: [34, 38], 4: [30, 34], 3: [26, 32], 2: [22, 26], 1: [19, 21] },
+  'Późna laktacja': { 5: [28, 30], 4: [24, 28], 3: [20, 24], 2: [16, 20], 1: [13, 15] },
 };
 
 const scoreLabel = {
@@ -37,13 +19,15 @@ const scoreLabel = {
 };
 
 const state = {
-  screen: 'herd',
+  screen: 'splash',
   selectedCow: null,
   selectedFile: null,
   previewUrl: '',
 };
 
 const screens = {
+  splash: document.querySelector('#screen-splash'),
+  menu: document.querySelector('#screen-menu'),
   herd: document.querySelector('#screen-herd'),
   upload: document.querySelector('#screen-upload'),
   preview: document.querySelector('#screen-preview'),
@@ -51,23 +35,42 @@ const screens = {
 };
 
 const backButton = document.querySelector('#backButton');
+const menuHerdButton = document.querySelector('#menuHerdButton');
 const cowList = document.querySelector('#cowList');
 const usgInput = document.querySelector('#usgInput');
-const toPreviewButton = document.querySelector('#toPreviewButton');
 const analyzeButton = document.querySelector('#analyzeButton');
-const restartButton = document.querySelector('#restartButton');
+const finishButton = document.querySelector('#finishButton');
 const selectedCowLabel = document.querySelector('#selectedCowLabel');
 const previewCowLabel = document.querySelector('#previewCowLabel');
 const resultCowLabel = document.querySelector('#resultCowLabel');
 const previewImage = document.querySelector('#previewImage');
 const resultCard = document.querySelector('#resultCard');
 
+const screenParents = {
+  splash: null,
+  menu: null,
+  herd: 'menu',
+  upload: 'herd',
+  preview: 'upload',
+  result: 'herd',
+};
+
 const setScreen = (name) => {
   Object.entries(screens).forEach(([key, element]) => {
     element.classList.toggle('active', key === name);
   });
   state.screen = name;
-  backButton.classList.toggle('hidden', name === 'herd');
+  backButton.classList.toggle('hidden', !screenParents[name]);
+};
+
+const goToPreview = () => {
+  if (!state.selectedFile || !state.selectedCow) return;
+  if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
+
+  state.previewUrl = URL.createObjectURL(state.selectedFile);
+  previewCowLabel.textContent = `Podgląd dla: ${state.selectedCow.id}`;
+  previewImage.src = state.previewUrl;
+  setScreen('preview');
 };
 
 const renderCows = () => {
@@ -86,7 +89,6 @@ const renderCows = () => {
       selectedCowLabel.textContent = `Krowa: ${cow.id} (${cow.name})`;
       usgInput.value = '';
       state.selectedFile = null;
-      toPreviewButton.disabled = true;
       setScreen('upload');
     });
 
@@ -95,20 +97,21 @@ const renderCows = () => {
 };
 
 const deterministicInference = async (file, cow) => {
-  const buffer = await file.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
+  const bytes = new Uint8Array(await file.arrayBuffer());
   let hash = 2166136261;
+
   for (const byte of bytes) {
     hash ^= byte;
     hash = Math.imul(hash, 16777619);
   }
+
   for (const char of cow.id) {
     hash ^= char.charCodeAt(0);
     hash = Math.imul(hash, 16777619);
   }
 
-  const phaseList = ['Wczesna laktacja', 'Środkowa laktacja', 'Późna laktacja'];
-  const phase = phaseList[Math.abs(hash) % phaseList.length];
+  const phases = ['Wczesna laktacja', 'Środkowa laktacja', 'Późna laktacja'];
+  const phase = phases[Math.abs(hash) % phases.length];
   const score = (Math.abs(hash >> 3) % 5) + 1;
   const [min, max] = milkRanges[phase][score];
   const expected = min + (Math.abs(hash >> 6) % (max - min + 1));
@@ -116,20 +119,14 @@ const deterministicInference = async (file, cow) => {
   return { phase, score, expected };
 };
 
+menuHerdButton.addEventListener('click', () => setScreen('herd'));
+
 usgInput.addEventListener('change', () => {
   const [file] = usgInput.files;
   state.selectedFile = file ?? null;
-  toPreviewButton.disabled = !state.selectedFile;
-});
-
-toPreviewButton.addEventListener('click', () => {
-  if (!state.selectedFile || !state.selectedCow) return;
-  if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
-
-  state.previewUrl = URL.createObjectURL(state.selectedFile);
-  previewCowLabel.textContent = `Podgląd dla: ${state.selectedCow.id}`;
-  previewImage.src = state.previewUrl;
-  setScreen('preview');
+  if (state.selectedFile) {
+    goToPreview();
+  }
 });
 
 analyzeButton.addEventListener('click', async () => {
@@ -156,17 +153,13 @@ analyzeButton.addEventListener('click', async () => {
   setScreen('result');
 });
 
-restartButton.addEventListener('click', () => setScreen('herd'));
+finishButton.addEventListener('click', () => setScreen('herd'));
 
 backButton.addEventListener('click', () => {
-  if (state.screen === 'upload') {
-    setScreen('herd');
-  } else if (state.screen === 'preview') {
-    setScreen('upload');
-  } else if (state.screen === 'result') {
-    setScreen('preview');
-  }
+  const parent = screenParents[state.screen];
+  if (parent) setScreen(parent);
 });
 
 renderCows();
-setScreen('herd');
+setScreen('splash');
+setTimeout(() => setScreen('menu'), 1500);

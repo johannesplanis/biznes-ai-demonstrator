@@ -2,14 +2,14 @@
 
 Mobilny demonstrator webowy przedstawiający główną ścieżkę produktu:
 
-1. wybór jednej z 3 predefiniowanych krów,
-2. upload zdjęcia USG,
-3. podgląd zdjęcia,
-4. deterministyczny (lokalny) wynik algorytmu: współczynnik mleczności, faza laktacji i prognoza kg/dzień.
+1. ekran startowy (splash, 1.5s),
+2. menu główne,
+3. przejście do listy 3 predefiniowanych krów,
+4. upload zdjęcia USG i automatyczny podgląd,
+5. deterministyczny (lokalny) wynik algorytmu: współczynnik mleczności, faza laktacji i prognoza kg/dzień,
+6. zakończenie badania i powrót do listy krów.
 
 ## Uruchomienie lokalne
-
-Najprościej uruchomić statyczny serwer w katalogu projektu:
 
 ```bash
 python3 -m http.server 4173
