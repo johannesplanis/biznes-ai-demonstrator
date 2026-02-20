@@ -115,8 +115,9 @@ const deterministicInference = async (file, cow) => {
   const score = (Math.abs(hash >> 3) % 5) + 1;
   const [min, max] = milkRanges[phase][score];
   const expected = min + (Math.abs(hash >> 6) % (max - min + 1));
+  const days = (Math.abs(hash >> 9) % 120) + 20;
 
-  return { phase, score, expected };
+  return { phase, score, expected, days };
 };
 
 menuHerdButton.addEventListener('click', () => setScreen('herd'));
@@ -144,7 +145,7 @@ analyzeButton.addEventListener('click', async () => {
     <p>Faza laktacji: <strong>${result.phase}</strong></p>
     <p>Współczynnik mleczności:</p>
     <p class="score">${result.score}/5 • ${scoreLabel[result.score]}</p>
-    <p>Prognoza: W ciągu następnych dni możesz się średnio spodziewać <strong>${result.expected} kg mleka dziennie</strong>.</p>
+    <p>Prognoza: W ciągu następnych ${result.days} dni obecnego cyklu szacunkowa wartość udoju wynosi <strong>${result.expected} kg (${(result.expected / 1.03).toFixed(2)} litrów) mleka dziennie</strong>.</p>
     <p class="meta">Predykcja liczona do końca bieżącego cyklu laktacji.</p>
   `;
 
